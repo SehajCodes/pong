@@ -31,12 +31,18 @@ function setup() {
   Y = windowHeight/2
   leftPaddleY = Y
   rightPaddleY = Y
-  
+
   rectMode(CENTER)
 }
 
 function draw() {
   
+  background(151, 244, 247)
+  stroke(69)
+  strokeWeight(4)
+  line(windowWidth/2, 0, windowWidth/2, windowHeight)
+  noStroke();
+
   if (keyIsDown(087) && leftPaddleY > paddleH/2) {
     leftPaddleY = leftPaddleY - windowHeight/70
   }
@@ -52,6 +58,23 @@ function draw() {
     rightPaddleY = rightPaddleY + windowHeight/70
   }
   
+//mouse and touch experimental start
+  if (mouseIsPressed) {
+    if (mouseX < windowWidth/2 && mouseY < leftPaddleY && leftPaddleY > paddleH/2) {
+      leftPaddleY = leftPaddleY - windowHeight/70
+    }
+    if (mouseX < windowWidth/2 && mouseY > leftPaddleY && leftPaddleY < windowHeight-paddleH/2) {
+      leftPaddleY = leftPaddleY + windowHeight/70
+    }
+    if (mouseX > windowWidth/2 && mouseY < rightPaddleY && rightPaddleY > paddleH/2) {
+      rightPaddleY = rightPaddleY - windowHeight/70
+    }
+    if (mouseX > windowWidth/2 && mouseY > rightPaddleY && rightPaddleY < windowHeight-paddleH/2) {
+      rightPaddleY = rightPaddleY + windowHeight/70
+    }
+  }
+//mouse and touch experimental end
+
   var tempX = changeX
   var tempY = changeY
 
@@ -60,14 +83,11 @@ function draw() {
     tempY = changeY / 4
     console.log("slow mo")
   }
-
-  background(151, 244, 247)
-  noStroke();
   
   //Horizontal Change
   spotX = spotX + tempX;
   
-  //to prevent the circle from clipping to a border
+  //to prevent the circle from clipping to X border
   if (spotX > windowWidth-paddleW-windowHeight/32) {
     spotX = windowWidth-paddleW-windowHeight/32
   }
@@ -75,24 +95,34 @@ function draw() {
     spotX = paddleW+windowHeight/32
   }
   
-  //var changeX will become changeX*-1 if conditions satisfied, else page reloads
+  //var changeX will become changeX*-1 if conditions satisfied, else page setup() will be called
   if (spotX == paddleW+windowHeight/32) {
     if (leftPaddleY-paddleH/2-windowHeight/32<spotY && spotY<leftPaddleY+paddleH/2+windowHeight/32) {
     changeX = changeX * -1
-    } else {spotX = windowWidth/2
-            spotY = windowHeight/2}
+    } else {
+      prevLeftPaddleY = leftPaddleY
+      prevRightPaddleY = rightPaddleY
+      setup()
+      leftPaddleY = prevLeftPaddleY
+      rightPaddleY = prevRightPaddleY
+      }
   }
   if (spotX == windowWidth-paddleW-windowHeight/32) {
     if (rightPaddleY-paddleH/2-windowHeight/32<spotY && spotY<rightPaddleY+paddleH/2+windowHeight/32) {
-    changeX = changeX * -1
-    } else {spotX = windowWidth/2
-    spotY = windowHeight/2}
+      changeX = changeX * -1
+    } else {
+      prevLeftPaddleY = leftPaddleY
+      prevRightPaddleY = rightPaddleY
+      setup()
+      leftPaddleY = prevLeftPaddleY
+      rightPaddleY = prevRightPaddleY
+    }
   }
 
   //Vertical Change
   spotY = spotY + tempY;
 
-  //to prevent the circle from clipping to a border
+  //to prevent the circle from clipping to Y border
   if (spotY < windowHeight*1/32) {
     spotY = windowHeight*1/32
   }
@@ -121,5 +151,5 @@ function draw() {
 }
 
 function windowResized() {
-  window.location.reload()
+  setup()
 }
