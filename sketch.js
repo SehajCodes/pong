@@ -57,23 +57,23 @@ function draw() {
   if (keyIsDown(DOWN_ARROW) && rightPaddleY < windowHeight-paddleH/2) {
     rightPaddleY = rightPaddleY + windowHeight/70
   }
-  
-//mouse and touch experimental start
-  if (mouseIsPressed) {
-    if (mouseX < windowWidth/2 && mouseY < leftPaddleY && leftPaddleY > paddleH/2) {
-      leftPaddleY = leftPaddleY - windowHeight/70
-    }
-    if (mouseX < windowWidth/2 && mouseY > leftPaddleY && leftPaddleY < windowHeight-paddleH/2) {
-      leftPaddleY = leftPaddleY + windowHeight/70
-    }
-    if (mouseX > windowWidth/2 && mouseY < rightPaddleY && rightPaddleY > paddleH/2) {
-      rightPaddleY = rightPaddleY - windowHeight/70
-    }
-    if (mouseX > windowWidth/2 && mouseY > rightPaddleY && rightPaddleY < windowHeight-paddleH/2) {
-      rightPaddleY = rightPaddleY + windowHeight/70
-    }
+
+  if (touches.length>0) {
+    for (let i = 0; i<touches.length; i++) {
+      if (touches[i].x < windowWidth/2 && touches[i].y < leftPaddleY && leftPaddleY > paddleH/2) {
+        leftPaddleY = leftPaddleY - windowHeight/70
+      }
+      if (touches[i].x < windowWidth/2 && touches[i].y > leftPaddleY && leftPaddleY < windowHeight-paddleH/2) {
+        leftPaddleY = leftPaddleY + windowHeight/70
+      }
+      if (touches[i].x > windowWidth/2 && touches[i].y < rightPaddleY && rightPaddleY > paddleH/2) {
+        rightPaddleY = rightPaddleY - windowHeight/70
+      }
+      if (touches[i].x > windowWidth/2 && touches[i].y > rightPaddleY && rightPaddleY < windowHeight-paddleH/2) {
+        rightPaddleY = rightPaddleY + windowHeight/70
+      }
   }
-//mouse and touch experimental end
+}
 
   var tempX = changeX
   var tempY = changeY
